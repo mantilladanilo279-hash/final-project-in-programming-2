@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+
+  <link rel="stylesheet" href="css/register.css"> 
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+</head>
+<body class="auth-page register-page">
+
+<div class="logo-container">
+  <img src="logo.png" alt="Library Logo" class="logo">
+</div>
+
+
+<div class="auth-container">
+
+  <div class="auth-card">
+
+    <h1>Create Account</h1>
+    <p class="auth-subtitle">Join the library and start building your reading list.</p>
+
+    <div class="input-box">
+      <i class="fa-solid fa-id-card"></i>
+      <input type="text" id="fullname" placeholder="Full Name">
+    </div>
+
+    <div class="input-box">
+      <i class="fa-solid fa-envelope"></i>
+      <input type="email" id="email" placeholder="Email">
+    </div>
+
+    <div class="input-box">
+      <i class="fa-solid fa-user"></i>
+      <input type="text" id="username" placeholder="Username">
+    </div>
+
+    <div class="input-box">
+      <i class="fa-solid fa-lock"></i>
+      <input type="password" id="password" placeholder="Password">
+    </div>
+
+    <button onclick="registerUser()">Register</button>
+
+    
+
+    <p class="auth-switch">
+      Already have an account?
+      <a href="login.html">Login</a>
+    </p>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-line"></div>
+
+  <h3>READ MORE, GROW MORE</h3>
+
+  <p>Build your library journey one book at a time</p>
+</div>
+
+<script src="js/flash.js"></script>
+<script src="js/register.js"></script>
+
+</body>
+</html>

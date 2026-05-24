@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Library Management System</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <style>
+
+    /* HIDE ALL SECTIONS */
+    .section{
+      display: none;
+    }
+
+    /* SHOW ACTIVE SECTION */
+    .section.active{
+      display: block;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<div class="sidebar">
+
+  <h2 class="brand">
+    <img src="logo.png" alt="LBMS Logo">
+    <span>LBMS</span>
+  </h2>
+
+  <!-- DASHBOARD -->
+  <a href="#"
+  onclick="showSection('dashboard')">
+  <span class="nav-icon" aria-hidden="true">&#8962;</span>
+  <span>Dashboard</span>
+  </a>
+
+  <!-- MANAGE -->
+  <a href="#"
+  onclick="showSection('manageBooks')">
+  <span class="nav-icon" aria-hidden="true">&#9638;</span>
+  <span>Add Books</span>
+  </a>
+
+  <!-- BORROW -->
+  <a href="#"
+  onclick="showSection('borrowBook')">
+  <span class="nav-icon" aria-hidden="true">&#8594;</span>
+  <span>Borrow Book</span>
+  </a>
+
+  <!-- RETURN -->
+  <a href="#"
+  onclick="showSection('returnBook')">
+  <span class="nav-icon" aria-hidden="true">&#8634;</span>
+  <span>Return Book</span>
+  </a>
+
+  <!-- LOGOUT -->
+  <a href="login.html"
+  class="logout-link"
+  onclick="logoutUser(event)">
+  <span class="nav-icon" aria-hidden="true">&#8617;</span>
+  <span>Logout</span>
+  </a>
+
+</div> 
+
+<!-- CONTENT -->
+<main class="content">
+
+  <div class="top-search">
+    <input type="text"
+    id="topSearchInput"
+    placeholder="Search books..."
+    onkeyup="topSearchBook()">
+  </div>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="section active">
+
+    <div class="welcome-box">
+      <h1>Welcome to the Library Dashboard</h1>
+      <p>Discover new stories, track borrowed books, and keep every shelf organized.</p>
+      <p>Reading a few pages each day can open bigger ideas, calmer moments, and brighter conversations.</p>
+    </div>
+
+    <div class="cards">
+
+      <div class="card">
+        <span class="card-icon">B</span>
+        <h3>Total Books</h3>
+        <h1 id="totalBooks">0</h1>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">↗</span>
+        <h3>Borrowed Books</h3>
+        <h1 id="borrowedBooks">0</h1>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">✓</span>
+        <h3>Available Books</h3>
+        <h1 id="availableBooks">0</h1>
+      </div>
+
+    </div>
+
+    <div class="table-box book-list-box">
+
+      <h2>Book List</h2>
+
+      <div id="bookGrid" class="book-grid"></div>
+
+    </div>
+
+  </section>
+
+  <!-- MANAGE BOOKS -->
+  <section id="manageBooks" class="section">
+
+    <h1>Manage Books</h1>
+
+    <div class="form-box">
+
+      <h2 id="manageFormTitle">Add Book</h2>
+
+      <input type="text"
+      id="bookTitle"
+      placeholder="Book Title">
+
+      <input type="text"
+      id="bookAuthor"
+      placeholder="Author">
+
+      <label class="cover-upload" for="bookCover">
+        <span class="cover-upload-preview" id="bookCoverPreview"></span>
+        <span>
+          <strong>Add Book Cover</strong>
+          <small>Choose an image from your computer</small>
+        </span>
+      </label>
+
+      <input type="file"
+      id="bookCover"
+      accept="image/*"
+      onchange="previewBookCover(event)">
+
+      <button id="bookSaveButton" onclick="saveBookFromForm()">
+        Add Book
+      </button>
+
+    </div>
+
+    <div class="table-box manage-books-box">
+      <h2>Library Books</h2>
+      <div id="manageBookList" class="manage-book-list"></div>
+    </div>
+
+  </section>
+
+  <!-- BORROW -->
+  <section id="borrowBook" class="section">
+
+    <h1>Borrow Book</h1>
+
+    <div class="form-box">
+
+      <select id="borrowSelect"></select>
+
+      <button onclick="borrowBook()">
+        Borrow Book
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- RETURN -->
+  <section id="returnBook" class="section">
+
+    <h1>Return Book</h1>
+
+    <div class="form-box">
+
+      <select id="returnSelect"></select>
+
+      <button onclick="returnBook()">
+        Return Book
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- SEARCH -->
+  <section id="searchBook" class="section">
+
+    <h1>Search Book</h1>
+
+    <div class="form-box">
+
+      <input type="text"
+      id="searchInput"
+      placeholder="Enter book title"
+      onkeyup="searchBook()">
+
+    </div>
+
+    <div class="table-box">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="searchTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</main>
+
+<div id="editBookModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="editBookModalTitle">
+  <div class="modal-box edit-modal-box">
+    <h2 id="editBookModalTitle">Edit Book</h2>
+
+    <input type="text"
+    id="editBookTitle"
+    placeholder="Book Title">
+
+    <input type="text"
+    id="editBookAuthor"
+    placeholder="Author">
+
+    <label class="cover-upload" for="editBookCover">
+      <span class="cover-upload-preview" id="editBookCoverPreview"></span>
+      <span>
+        <strong>Change Book Cover</strong>
+        <small>Choose a new image from your computer</small>
+      </span>
+    </label>
+
+    <input type="file"
+    id="editBookCover"
+    accept="image/*"
+    onchange="previewEditBookCover(event)">
+
+    <div class="modal-actions">
+      <button class="secondary-button" onclick="cancelEditBook()">Cancel</button>
+      <button onclick="saveEditedBook()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div id="removeBookModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="removeBookModalTitle">
+  <div class="modal-box confirm-modal-box">
+    <h2 id="removeBookModalTitle">Remove Book</h2>
+    <p id="removeBookMessage">Are you sure you want to remove this book?</p>
+
+    <div class="modal-actions">
+      <button class="secondary-button" onclick="cancelRemoveBook()">Cancel</button>
+      <button class="danger-button" onclick="confirmRemoveBook()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+
+function showSection(sectionId){
+
+  // GET ALL SECTIONS
+  const sections =
+  document.querySelectorAll('.section');
+
+  // HIDE ALL
+  sections.forEach(section => {
+    section.classList.remove('active');
+  });
+
+  // SHOW CLICKED SECTION
+  document
+    .getElementById(sectionId)
+    .classList.add('active');
+
+  const topSearch = document.querySelector('.top-search');
+  const hideSearchBar = ['manageBooks', 'borrowBook', 'returnBook'].includes(sectionId);
+
+  if(topSearch){
+    topSearch.style.display = hideSearchBar ? 'none' : 'block';
+  }
+
+  if(sectionId === 'searchBook'){
+    searchBook();
+  }
+}
+
+</script>
+
+<script src="js/flash.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
